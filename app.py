@@ -3,21 +3,17 @@ import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta
 from flask_socketio import SocketIO, emit
+import os
 
 app = Flask(__name__)
 
-app.secret_key = 'marlonlalrempuia'
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-fallback-key')
 app.permanent_session_lifetime = timedelta(hours=1)
 
 socketio = SocketIO(app)
 
 def get_db():
-    return psycopg2.connect(
-        dbname = 'chatroom',
-        user = 'postgres',
-        password = 'Marlon@123',
-        host = 'localhost'
-    )
+    return psycopg2.connect(os.environ.get('DATABASE_URL'))
 
 @app.route('/group/1', methods=['GET', 'POST'])
 def home():
@@ -103,4 +99,5 @@ def logout():
     return redirect('/group/1')
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    socketio.run(app, debug=True, host='0.0.0.0', port=port)

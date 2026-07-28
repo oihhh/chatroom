@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register</title>
+</head>
+<body>
+<link rel="stylesheet" href="{{ url_for ('static', filename='register.css')}}">
+
+
+<div class="card">
+  <div class="prompt">$ ./register</div>
+  <div class="title">create account</div>
+  <div class="hint">register to get unique name</div>
+
+  <form method="POST">
+    <div class="field">
+      <label>username</label>
+      <input type="text" name="username" placeholder="enter username" required>
+    </div>
+    <div class="field">
+      <label>password</label>
+      <input type="password" name="password" placeholder="enter password" required>
+    </div>
+    <button type="submit" class="submit-btn">register</button>
+  </form>
+
+  <div class="switch">already have an account? <a href="login.html">login</a></div>
+</div>
+
+</body>
+</html>

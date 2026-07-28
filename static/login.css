@@ -1,0 +1,87 @@
+:root {
+    --obsidian: #0d0e12;
+    --panel: #131419;
+    --border: #24262e;
+    --text: #d7d9e0;
+    --muted: #6b7080;
+    --accent: #7c8cff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    font-family: "Courier New", Consolas, monospace;
+  }
+  .card {
+    width: 340px;
+    background: var(--obsidian);
+    border: 1px solid var(--border);
+    padding: 24px;
+  }
+  .prompt {
+    color: var(--accent);
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .title {
+    color: var(--text);
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+  .hint {
+    color: var(--muted);
+    font-size: 12.5px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  label {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .field {
+    margin-bottom: 16px;
+  }
+  input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px 10px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  input::placeholder { color: var(--muted); }
+  .submit-btn {
+    width: 100%;
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 10px;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  .submit-btn:active { opacity: 0.7; }
+  .switch {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 16px;
+    text-align: center;
+  }
+  .switch a {
+    color: var(--accent);
+    text-decoration: none;
+  }

@@ -2,5 +2,4 @@ Flask
 Flask-SocketIO
 psycopg2-binary
 Werkzeug
-gunicorn
 eventlet

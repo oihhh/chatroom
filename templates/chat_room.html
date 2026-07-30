@@ -58,7 +58,9 @@
   const socket = io();  // connects to the server automatically
 
   const messages = document.getElementById('messages');
-  messages.scrollTop = messages.scrollHeight;
+  window.addEventListener('load', () => {
+    messages.scrollTop = messages.scrollHeight;
+  });  
   const msgInput = document.getElementById('msgInput');
   const sendBtn = document.getElementById('sendBtn');
   const currentUser = "{{ current_user }}";

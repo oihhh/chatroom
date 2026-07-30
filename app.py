@@ -44,13 +44,15 @@ def register():
             (username, password_hash)
         )
         conn.commit()
-    except psycopg2.errors.UniqueViolation:
-        conn.rollback()
-        return render_template('register.html', error="Username is already taken")
-    finally:
         cur.close()
         conn.close()
         return redirect('/login')
+    except psycopg2.errors.UniqueViolation:
+        conn.rollback()
+        cur.close()
+        conn.close()
+        return render_template('register.html', error="Username is already taken")
+    
 
 
 

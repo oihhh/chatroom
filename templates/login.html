@@ -12,11 +12,11 @@
   <div class="prompt">$ ./login</div>
   <div class="title">welcome back</div>
   <div class="hint">enter your credentials to continue</div>
+  {% if error %}
+      <div class="error-message">{{ error }}</div>
+  {% endif %}
 
   <form method='POST'>
-    {% if error %}
-      <div class="error-message">{{ error }}</div>
-    {% endif %}
     <div class="field">
       <label>username</label>
       <input type="text" name="username" placeholder="enter username" required>

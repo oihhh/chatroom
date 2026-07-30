@@ -55,6 +55,9 @@
 </div>
 
 <script>
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
   const socket = io();  // connects to the server automatically
 
   const messages = document.getElementById('messages');

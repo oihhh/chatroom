@@ -22,6 +22,7 @@ def home():
     cur = conn.cursor()
     cur.execute("SELECT sender_name, content, sent_at FROM messages ORDER BY sent_at DESC LIMIT 50")
     messages = cur.fetchall()
+    messages.reverse()
     cur.close()
     conn.close()
     return render_template('chat_room.html', current_user=username, messages=messages)

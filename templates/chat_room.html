@@ -55,15 +55,8 @@
 </div>
 
 <script>
-  if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'manual';
-  }
   const socket = io();  // connects to the server automatically
-
-  const messages = document.getElementById('messages');
-  window.addEventListener('load', () => {
-    messages.scrollTop = messages.scrollHeight;
-  });  
+  const messages = document.getElementById('messages'); 
   const msgInput = document.getElementById('msgInput');
   const sendBtn = document.getElementById('sendBtn');
   const currentUser = "{{ current_user }}";

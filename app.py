@@ -20,7 +20,7 @@ def home():
     username = session.get('username', '<anonymous>')
     conn = get_db()
     cur = conn.cursor()
-    cur.execute("SELECT sender_name, content, sent_at FROM messages ORDER BY sent_at ASC LIMIT 50")
+    cur.execute("SELECT sender_name, content, sent_at FROM messages ORDER BY sent_at DESC LIMIT 50")
     messages = cur.fetchall()
     cur.close()
     conn.close()
@@ -74,7 +74,7 @@ def login():
     if user and check_password_hash(user[1], password):
         session.permanent = True
         session['username'] = user[2]
-        return redirect('/group/1')
+        return redirect('/group/1') 
     return render_template('login.html', error="Wrong password or username")
 
 @socketio.on('send_message')

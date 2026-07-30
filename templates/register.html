@@ -13,6 +13,10 @@
   <div class="title">create account</div>
   <div class="hint">register to get unique name</div>
 
+  {% if error %}
+    <div class="error-message">{{ error }}</div>
+  {% endif %}
+
   <form method="POST">
     <div class="field">
       <label>username</label>
@@ -23,7 +27,7 @@
       <input type="password" name="password" placeholder="enter password" required>
     </div>
     <button type="submit" class="submit-btn">register</button>
-  </form>
+  </form> 
 
   <div class="switch">already have an account? <a href="/login">login</a></div>
 </div>

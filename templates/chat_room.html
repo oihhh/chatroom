@@ -42,11 +42,9 @@
   </div>
 
   <div class="messages" id="messages">
-    {% for sender, content, sent_at in messages %}
-      <div class="line{% if sender == current_user %} self{% endif %}">
-        <span class="time">{{ sent_at.strftime('%H:%M') }}</span><span class="sender">{{ sender }}:</span>{{ content }}
-      </div>
-    {% endfor %}
+    <div class="messages" id="messages">
+      {% for sender, content, sent_at in messages %}<div class="line{% if sender == current_user %} self{% endif %}"><span class="time">{{ sent_at.strftime('%H:%M') }}</span><span class="sender">{{ sender }}:</span>{{ content }}</div>{% endfor %}
+    </div>
   </div>
 
   <div class="input-bar">
@@ -60,6 +58,7 @@
   const socket = io();  // connects to the server automatically
 
   const messages = document.getElementById('messages');
+  messages.scrollTop = messages.scrollHeight;
   const msgInput = document.getElementById('msgInput');
   const sendBtn = document.getElementById('sendBtn');
   const currentUser = "{{ current_user }}";

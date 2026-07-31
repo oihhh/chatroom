@@ -166,7 +166,8 @@ form { display: flex; flex-direction: column; gap: 18px; }
 }
 
 .pw-feedback {
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 600;
   letter-spacing: 0.05em;
   color: var(--line);
   min-height: 14px;
@@ -176,8 +177,12 @@ form { display: flex; flex-direction: column; gap: 18px; }
 .pw-feedback[data-state="match"] { color: var(--dim); }
 .pw-feedback[data-state="match"]::before { content: "[\2713] "; }
 
-.pw-feedback[data-state="mismatch"] { color: var(--dim); }
+.pw-feedback[data-state="mismatch"] { color: #ff5c5c; }
 .pw-feedback[data-state="mismatch"]::before { content: "[\2717] "; }
+
+.field input[data-state="mismatch"] {
+  border-color: #ff5c5c;
+}
 
 .submit-btn {
   appearance: none;

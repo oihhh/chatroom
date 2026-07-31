@@ -41,7 +41,12 @@
   </div>
 
   <div class="claim-text">claim your name and run your own group</div>
-  <a class="auth-link" href="#auth">login / register</a>
+  {% if current_user == '<anonymous>' %}
+    <a class="auth-link" href="/register">login / register</a>
+  {% else %}
+    <a class="auth-link" href="/login">login / register</a>
+  {% endif %}
+    
 </div>
 
 <script>

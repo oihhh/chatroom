@@ -17,20 +17,60 @@
     <div class="error-message">{{ error }}</div>
   {% endif %}
 
-  <form method="POST">
+  <form method="POST" id="registerForm">
     <div class="field">
       <label>username</label>
       <input type="text" name="username" placeholder="enter username" required>
     </div>
     <div class="field">
       <label>password</label>
-      <input type="password" name="password" placeholder="enter password" required>
+      <input type="password" name="password" id="password" placeholder="enter password" required>
     </div>
-    <button type="submit" class="submit-btn">register</button>
+    <div class="field">
+      <label>confirm password</label>
+      <input type="password" name="confirm_password" id="confirmPassword" placeholder="re-enter password" required>
+      <div class="pw-feedback" id="pwFeedback"></div>
+    </div>
+    <button type="submit" class="submit-btn" id="submitBtn">register</button>
   </form> 
 
   <div class="switch">already have an account? <a href="/login">login</a></div>
 </div>
+
+<script>
+const password = document.getElementById('password');
+const confirmPassword = document.getElementById('confirmPassword');
+const feedback = document.getElementById('pwFeedback');
+const submitBtn = document.getElementById('submitBtn');
+const form = document.getElementById('registerForm');
+
+function checkMatch() {
+  if (confirmPassword.value === '') {
+    feedback.textContent = '';
+    feedback.removeAttribute('data-state');
+    confirmPassword.removeAttribute('data-state');
+    submitBtn.disabled = false;
+    return;
+  }
+
+  const matches = password.value === confirmPassword.value;
+
+  feedback.textContent = matches ? 'passwords match' : 'passwords do not match';
+  feedback.setAttribute('data-state', matches ? 'match' : 'mismatch');
+  confirmPassword.setAttribute('data-state', matches ? 'match' : 'mismatch');
+  submitBtn.disabled = !matches;
+}
+
+password.addEventListener('input', checkMatch);
+confirmPassword.addEventListener('input', checkMatch);
+
+form.addEventListener('submit', function (e) {
+  if (password.value !== confirmPassword.value) {
+    e.preventDefault();
+    checkMatch();
+  }
+});
+</script>
 
 </body>
 </html>

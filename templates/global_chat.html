@@ -21,7 +21,7 @@
     </div>
 
     <div class="header-right">
-      {% if is_anon %}
+      {% if current_user == <anonymous> %}
         <a href="/login" class="auth-btn">login</a>
         <a href="/register" class="auth-btn">register</a>
       {% else %}

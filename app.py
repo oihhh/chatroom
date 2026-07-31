@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta
 from flask_socketio import SocketIO, emit
 import os
+import random
 
 app = Flask(__name__)
 
@@ -15,6 +16,13 @@ socketio = SocketIO(app)
 def get_db():
     return psycopg2.connect(os.environ.get('DATABASE_URL'))
 
+def get_display_name():
+    if 'username' in session:
+        return session['username'], False
+    if 'anon_id' not in session:
+        session['anon_id'] = random.randint(1000, 9999)
+    return f"<anonymous#{session['anon_id']}>", True
+
 @app.route('/landing', methods=['GET'])
 def landing_page():
     if request.method == 'GET':
@@ -23,7 +31,7 @@ def landing_page():
 
 @app.route('/group/1', methods=['GET', 'POST'])
 def home():
-    username = session.get('username', '<anonymous>')
+    username, is_anon = get_display_name()
     conn = get_db()
     cur = conn.cursor()
     cur.execute("SELECT sender_name, content, sent_at FROM messages ORDER BY sent_at DESC LIMIT 50")
@@ -31,7 +39,7 @@ def home():
     messages.reverse()
     cur.close()
     conn.close()
-    return render_template('global_chat.html', current_user=username, messages=messages)
+    return render_template('global_chat.html', current_user=username, messages=messages, is_anon=is_anon)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -87,7 +95,7 @@ def login():
 
 @socketio.on('send_message')
 def handle_message(data):
-    username = session.get('username', '<anonymous>')
+    username, is_anon = get_display_name()
     content = data['content']
 
     conn = get_db()
@@ -100,7 +108,7 @@ def handle_message(data):
     conn.close()
     cur.close()
 
-    emit('new_message', {'sender': username, 'content': content}, broadcast=True)
+    emit('new_message', {'sender': username, 'content': content}, broadcast=True, is_anon=is_anon)
 
 
 @app.route('/logout')

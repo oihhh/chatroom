@@ -15,7 +15,7 @@ socketio = SocketIO(app)
 def get_db():
     return psycopg2.connect(os.environ.get('DATABASE_URL'))
 
-app.route('/landing', methods=['GET'])
+@app.route('/landing', methods=['GET'])
 def landing_page():
 
     return render_template('landing_page.html')

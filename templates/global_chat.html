@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>#global</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for ('static', filename='global_chat.css')}}">
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <div class="header-left" id="headerToggle">
+      <div class="group-name">#global<span class="cursor"></span></div>
+      <div class="group-sub" id="groupSubDisplay">the unfiltered feed</div>
+    </div>
+
+    <div class="header-right">
+      {% if is_anon %}
+        <a href="/login" class="auth-btn">login</a>
+        <a href="/register" class="auth-btn">register</a>
+      {% else %}
+        <span class="auth-user">{{ current_user }}</span>
+        <a href="/logout" class="auth-btn">logout</a>
+      {% endif %}
+      <button class="edit-toggle" id="editToggleBtn" aria-label="edit group">&#9998;</button>
+    </div>
+  </div>
+
+  <div class="edit-panel" id="editPanel">
+    <div class="edit-field">
+      <label>group name</label>
+      <input type="text" id="nameInput" value="#global">
+    </div>
+    <div class="edit-field">
+      <label>description</label>
+      <textarea id="descInput" rows="2">the unfiltered feed</textarea>
+    </div>
+    <div class="edit-actions">
+      <button class="btn btn-cancel" id="cancelEdit">cancel</button>
+      <button class="btn btn-save" id="saveEdit">save</button>
+    </div>
+  </div>
+
+  <div class="messages" id="messages">
+    {% for sender, content, sent_at in messages %}<div class="line{% if sender == current_user %} self{% endif %}"><span class="time">{{ sent_at.strftime('%H:%M') }}</span><span class="sender">{{ sender }}:</span><span class="content">{{ content }}</span></div>{% endfor %}
+  </div>
+
+  <div class="input-bar">
+    <span class="prompt-sym">&gt;</span>
+    <input type="text" id="msgInput" placeholder="type a message" autocomplete="off">
+    <button class="send-btn" id="sendBtn">send</button>
+  </div>
+
+</div>
+
+<script>
+  history.scrollRestoration = 'manual';
+
+  const socket = io();
+  const messages = document.getElementById('messages');
+  const msgInput = document.getElementById('msgInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const currentUser = "{{ current_user }}";
+
+  function scrollToBottom() {
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  // fires on first paint, and again one frame later once layout has
+  // actually settled — covers slow-rendering mobile browsers reliably
+  document.addEventListener('DOMContentLoaded', scrollToBottom);
+  window.addEventListener('load', scrollToBottom);
+  requestAnimationFrame(() => requestAnimationFrame(scrollToBottom));
+
+  function sendMessage() {
+    const text = msgInput.value.trim();
+    if (!text) return;
+    socket.emit('send_message', { content: text });
+    msgInput.value = '';
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  msgInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  socket.on('new_message', (data) => {
+    const div = document.createElement('div');
+    div.className = 'line' + (data.sender === currentUser ? ' self' : '');
+    const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', hour12: false});
+    const safeSender = data.sender.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const safeContent = data.content.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    div.innerHTML = `<span class="time">${time}</span><span class="sender">${safeSender}:</span><span class="content">${safeContent}</span>`;
+    messages.appendChild(div);
+    scrollToBottom();
+  });
+
+  // edit panel toggle — local UI only, not persisted to the backend yet
+  const editPanel = document.getElementById('editPanel');
+  const editToggleBtn = document.getElementById('editToggleBtn');
+  const cancelEdit = document.getElementById('cancelEdit');
+  const saveEdit = document.getElementById('saveEdit');
+  const nameInput = document.getElementById('nameInput');
+  const descInput = document.getElementById('descInput');
+  const groupNameDisplay = document.querySelector('.group-name');
+  const groupSubDisplay = document.getElementById('groupSubDisplay');
+
+  editToggleBtn.addEventListener('click', () => editPanel.classList.toggle('open'));
+  cancelEdit.addEventListener('click', () => editPanel.classList.remove('open'));
+  saveEdit.addEventListener('click', () => {
+    groupNameDisplay.firstChild.textContent = nameInput.value;
+    groupSubDisplay.textContent = descInput.value;
+    editPanel.classList.remove('open');
+  });
+</script>
+
+</body>
+</html>

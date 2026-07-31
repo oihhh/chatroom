@@ -31,7 +31,7 @@ def home():
     messages.reverse()
     cur.close()
     conn.close()
-    return render_template('chat_room.html', current_user=username, messages=messages)
+    return render_template('global_chat.html', current_user=username, messages=messages)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

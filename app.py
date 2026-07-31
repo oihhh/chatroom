@@ -15,6 +15,11 @@ socketio = SocketIO(app)
 def get_db():
     return psycopg2.connect(os.environ.get('DATABASE_URL'))
 
+app.route('/', methods=['GET'])
+def landing_page():
+
+    return render_template('landing_page.html')
+
 @app.route('/group/1', methods=['GET', 'POST'])
 def home():
     username = session.get('username', '<anonymous>')

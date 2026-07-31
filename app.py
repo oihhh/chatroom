@@ -18,7 +18,9 @@ def get_db():
 @app.route('/landing', methods=['GET'])
 def landing_page():
 
-    return render_template('landing_page.html')
+    if request.method == 'GET':
+        return render_template('landing_page.html')
+
 
 @app.route('/group/1', methods=['GET', 'POST'])
 def home():
@@ -34,6 +36,7 @@ def home():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    
     if request.method == 'GET':
         return render_template('register.html')
 
